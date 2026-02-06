@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Каталог книг</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; margin: 0; max-width: 1000px; margin: auto; }
+  h2 { text-align: center; }
+  #searchBox { width: 100%; padding: 10px; font-size: 16px; margin: 20px 0; box-sizing: border-box; }
+  #results { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+  #results li { border: 1px solid #ddd; border-radius: 8px; padding: 10px; width: 100%; max-width: 250px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; }
+  #results img { width: 100%; border-radius: 5px; object-fit: cover; }
+  .price { font-weight: bold; margin-top: 5px; }
+  @media (max-width: 600px) {
+    #results li { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<h2>Каталог книг</h2>
+<input type="text" id="searchBox" placeholder="Пошук по назві або автору">
+<ul id="results"></ul>
+
+<script>
+  // ======= ДАНІ КНИГ =======
+  const books = [
+    {
+      Назва: "Приклад книги 1",
+      Автор: "Автор 1",
+      Опис: "Короткий опис книги 1.",
+      Ціна: 300,
+      Зображення: "https://drive.google.com/uc?export=view&id=1BajYcVujVyXMAeL_LZM5ulkYj3fYbzc8"
+    },
+    {
+      Назва: "Приклад книги 2",
+      Автор: "Автор 2",
+      Опис: "Короткий опис книги 2.",
+      Ціна: 450,
+      Зображення: "https://via.placeholder.com/150"
+    }
+    // Можна додавати стільки книг, скільки потрібно
+  ];
+
+  const searchBox = document.getElementById('searchBox');
+  const results = document.getElementById('results');
+
+  function renderBooks(list) {
+    results.innerHTML = '';
+    list.forEach(book => {
+      const li = document.createElement('li');
+
+      const img = document.createElement('img');
+      img.src = book.Зображення || 'https://via.placeholder.com/150';
+
+      const title = document.createElement('h3');
+      title.textContent = book.Назва;
+
+      const author = document.createElement('p');
+      author.textContent = book.Автор;
+
+      const desc = document.createElement('p');
+      desc.textContent = book.Опис;
+
+      const price = document.createElement('p');
+      price.textContent = book.Ціна ? `Ціна: ${book.Ціна} грн` : '';
+      price.className = 'price';
+
+      li.appendChild(img);
+      li.appendChild(title);
+      li.appendChild(author);
+      li.appendChild(desc);
+      li.appendChild(price);
+
+      results.appendChild(li);
+    });
+  }
+
+  // Показати всі книги спочатку
+  renderBooks(books);
+
+  // Пошук
+  searchBox.addEventListener('input', function() {
+    const query = searchBox.value.toLowerCase();
+    const filtered = books.filter(book => 
+      (book.Назва && book.Назва.toLowerCase().includes(query)) ||
+      (book.Автор && book.Автор.toLowerCase().includes(query))
+    );
+    renderBooks(filtered);
+  });
+</script>
+
+</body>
+</html>
